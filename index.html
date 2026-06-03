@@ -541,21 +541,33 @@
     }
 
     // ==================== АВТО-ОТКРЫТИЕ КОНВЕРТОВ ====================
+    // ==================== АВТО-ОТКРЫТИЕ КОНВЕРТОВ ====================
     function autoOpenByCode() {
         let urlCode = null;
         
-        // Способ 1: ?code=123456
+        // Способ 1: ?startapp=123456 (основной для Telegram)
         const params = new URLSearchParams(window.location.search);
-        urlCode = params.get('code');
+        urlCode = params.get('startapp');
         
-        // Способ 2: #/123456
+        // Способ 2: ?code=123456 (запасной)
+        if (!urlCode) urlCode = params.get('code');
+        
+        // Способ 3: #/123456 (запасной)
         if (!urlCode && window.location.hash) {
             const hash = window.location.hash.replace('#/', '').replace('#', '');
             if (hash.length === 6) urlCode = hash;
         }
         
+        // Способ 4: tg.initDataUnsafe.start_param
+        if (!urlCode && tg.initDataUnsafe?.start_param) {
+            urlCode = tg.initDataUnsafe.start_param;
+        }
+        
+        console.log('🔍 Код из URL:', urlCode);
+        
         if (urlCode && urlCode.length === 6) {
             const game = getGame(urlCode);
+            console.log('🎮 Игра найдена:', !!game);
             if (game && !game.done) {
                 gameData = game;
                 code = urlCode;
@@ -565,12 +577,25 @@
                 document.getElementById('env2').classList.remove('opened', 'locked');
                 opened = false;
                 showScreen('envelopes');
+                console.log('✅ Конверты открыты!');
                 return true;
+            } else {
+                console.log('❌ Игра не найдена или завершена');
+                tg.showPopup({ title: '❌', message: 'Игра не найдена или уже завершена' });
             }
         }
         return false;
     }
 
+    // ==================== ЗАПУСК ====================
+    updateLimitBar();
+    
+    // Пробуем открыть конверты при загрузке
+    setTimeout(() => {
+        if (!autoOpenByCode()) {
+            showScreen('menu');
+        }
+    }, 500);
     // ==================== ЗАПУСК ====================
     updateLimitBar();
     if (!autoOpenByCode()) {
