@@ -33,13 +33,9 @@
         .screen.active { display: block; animation: fadeIn 0.25s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ========== HEADER ========== */
         .header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 16px; padding-bottom: 12px;
             border-bottom: 1px solid var(--border);
         }
         .header .back-btn {
@@ -51,52 +47,26 @@
         .header h1, .header h2 { font-size: 19px; font-weight: 700; flex: 1; text-align: left; }
         .logo { font-size: 42px; }
 
-        /* ========== CARDS ========== */
         .card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 18px 16px;
-            margin-bottom: 10px;
-            backdrop-filter: blur(20px);
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 18px 16px;
+            margin-bottom: 10px; backdrop-filter: blur(20px);
         }
-        .card-accent {
-            border: 1px solid rgba(74,156,255,0.25);
-            background: rgba(74,156,255,0.06);
-        }
-        .card-gold {
-            border: 1px solid rgba(245,166,35,0.3);
-            background: rgba(245,166,35,0.06);
-        }
+        .card-gold { border: 1px solid rgba(245,166,35,0.3); background: rgba(245,166,35,0.06); }
 
-        /* ========== INPUTS ========== */
         input, textarea {
-            width: 100%;
-            padding: 14px 16px;
-            border-radius: 14px;
-            border: 1px solid var(--border);
-            background: rgba(255,255,255,0.04);
-            color: var(--text);
-            font-size: 16px;
-            margin: 6px 0;
-            outline: none;
-            transition: border 0.2s;
+            width: 100%; padding: 14px 16px; border-radius: 14px;
+            border: 1px solid var(--border); background: rgba(255,255,255,0.04);
+            color: var(--text); font-size: 16px; margin: 6px 0;
+            outline: none; transition: border 0.2s;
         }
         input:focus, textarea:focus { border-color: var(--accent); }
         input::placeholder, textarea::placeholder { color: var(--text2); }
 
-        /* ========== BUTTONS ========== */
         .btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 5px 0;
-            transition: all 0.2s;
-            letter-spacing: 0.3px;
+            width: 100%; padding: 15px; border: none; border-radius: 14px;
+            font-size: 16px; font-weight: 600; cursor: pointer;
+            margin: 5px 0; transition: all 0.2s; letter-spacing: 0.3px;
         }
         .btn:active { transform: scale(0.98); opacity: 0.9; }
         .btn-primary { background: var(--accent); color: white; }
@@ -104,44 +74,28 @@
         .btn-gold { background: linear-gradient(135deg, #F5A623, #F7B84E); color: #000; }
         .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
         .btn-sm { padding: 10px 16px; font-size: 14px; width: auto; display: inline-block; }
-        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        /* ========== ENVELOPES ========== */
-        .envelope-container {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin: 24px 0;
-        }
+        .envelope-container { display: flex; gap: 20px; justify-content: center; margin: 24px 0; }
         .envelope {
             width: 140px; height: 108px;
             background: linear-gradient(160deg, #F5A623, #E8961A);
-            border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 48px; cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 16px; display: flex; align-items: center; justify-content: center;
+            font-size: 48px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 8px 32px rgba(245,166,35,0.25);
-            border: 2.5px dashed #C77D10;
-            position: relative; overflow: hidden;
+            border: 2.5px dashed #C77D10; position: relative; overflow: hidden;
         }
         .envelope::after {
-            content: ''; position: absolute;
-            top: 0; left: 0; right: 0; height: 35%;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 35%;
             background: linear-gradient(180deg, rgba(255,255,255,0.2), transparent);
             border-radius: 16px 16px 0 0;
         }
         .envelope:active { transform: scale(0.94); }
         .envelope.opened {
             background: linear-gradient(160deg, #2ECC71, #27AE60);
-            border-color: #1E8449;
-            box-shadow: 0 8px 32px rgba(46,204,113,0.3);
+            border-color: #1E8449; box-shadow: 0 8px 32px rgba(46,204,113,0.3);
             animation: popOpen 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .envelope.locked {
-            opacity: 0.3; cursor: not-allowed;
-            background: #2a2a3a; border-color: #3a3a4a;
-            box-shadow: none;
-        }
+        .envelope.locked { opacity: 0.3; cursor: not-allowed; background: #2a2a3a; border-color: #3a3a4a; box-shadow: none; }
         .envelope.locked::after { display: none; }
         @keyframes popOpen {
             0% { transform: scale(1); }
@@ -158,91 +112,51 @@
         }
         .shaking { animation: shake 0.4s ease; }
 
-        /* ========== RESULT ========== */
         .result-block {
-            background: rgba(46,204,113,0.1);
-            border: 1px solid rgba(46,204,113,0.3);
-            border-radius: var(--radius);
-            padding: 18px;
-            margin: 16px 0;
-            text-align: center;
+            background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.3);
+            border-radius: var(--radius); padding: 18px; margin: 16px 0; text-align: center;
         }
         .result-block .chosen { font-size: 22px; font-weight: 700; color: var(--green); }
-        .code-display {
-            font-size: 34px; font-weight: 800; letter-spacing: 8px;
-            color: var(--gold); font-variant-numeric: tabular-nums;
-        }
-        .code-label { font-size: 12px; color: var(--text2); text-transform: uppercase; letter-spacing: 2px; }
+        .code-display { font-size: 34px; font-weight: 800; letter-spacing: 8px; color: var(--gold); }
 
-        /* ========== TEMPLATES ========== */
-        .templates-grid {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 8px; margin: 10px 0;
-        }
+        .templates-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
         .template-card {
             background: var(--card); border: 1px solid var(--border);
-            border-radius: 14px; padding: 16px 10px;
-            cursor: pointer; text-align: center;
-            transition: all 0.2s;
+            border-radius: 14px; padding: 16px 10px; cursor: pointer;
+            text-align: center; transition: all 0.2s;
         }
         .template-card:active { background: rgba(74,156,255,0.15); border-color: var(--accent); }
         .template-card .emoji { font-size: 30px; }
         .template-card .name { font-size: 13px; margin-top: 4px; font-weight: 600; }
 
-        /* ========== LIMIT BAR ========== */
         .limit-bar {
             display: flex; align-items: center; gap: 8px;
-            padding: 10px 14px; border-radius: 14px;
-            margin: 8px 0;
+            padding: 10px 14px; border-radius: 14px; margin: 8px 0;
             background: var(--card); border: 1px solid var(--border);
         }
-        .limit-bar .progress {
-            flex: 1; height: 6px; border-radius: 3px;
-            background: rgba(255,255,255,0.1); overflow: hidden;
-        }
-        .limit-bar .progress-fill {
-            height: 100%; border-radius: 3px;
-            background: var(--accent); transition: width 0.3s;
-        }
+        .limit-bar .progress { flex: 1; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.1); overflow: hidden; }
+        .limit-bar .progress-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width 0.3s; }
         .limit-bar.limit-reached .progress-fill { background: var(--red); }
-        .limit-badge {
-            background: linear-gradient(135deg, #F5A623, #F7B84E);
-            color: #000; font-size: 11px; font-weight: 700;
-            padding: 4px 10px; border-radius: 20px;
-        }
 
-        /* ========== INVITE CARD ========== */
         .invite-card {
             background: linear-gradient(135deg, rgba(108,92,231,0.2), rgba(74,156,255,0.15));
             border: 1px solid rgba(108,92,231,0.4);
-            border-radius: var(--radius); padding: 20px;
-            text-align: center; margin: 12px 0;
+            border-radius: var(--radius); padding: 20px; text-align: center; margin: 12px 0;
         }
         .invite-card .game-theme { font-size: 20px; font-weight: 700; margin: 8px 0; }
         .invite-card .invite-emoji { font-size: 50px; }
 
-        /* ========== BADGE ========== */
-        .badge {
-            display: inline-block; padding: 3px 10px; border-radius: 20px;
-            font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
-        }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
         .badge-vip { background: linear-gradient(135deg, #F5A623, #FFD700); color: #000; }
         .badge-free { background: rgba(255,255,255,0.1); color: var(--text2); }
 
-        /* ========== CONFETTI ========== */
         .confetti-piece {
             position: fixed; top: -10px; font-size: 22px;
             animation: confettiFall linear forwards; z-index: 9999; pointer-events: none;
         }
-        @keyframes confettiFall {
-            to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-        }
+        @keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
 
-        /* ========== STATS ========== */
-        .stat-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px 0; border-bottom: 1px solid var(--border);
-        }
+        .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
         .stat-row:last-child { border-bottom: none; }
         .stat-value { font-weight: 700; font-size: 18px; }
         .stat-label { color: var(--text2); font-size: 14px; }
@@ -255,26 +169,22 @@
 </head>
 <body>
 
-<!-- ==================== ГЛАВНОЕ МЕНЮ ==================== -->
 <div id="menu" class="screen active">
     <div class="text-center mt-16">
         <div class="logo">🎭</div>
         <h1 style="font-size:26px;font-weight:800;">Слепой выбор</h1>
         <p style="color:var(--text2);margin-bottom:20px;">Принимай решения с друзьями</p>
     </div>
-
     <div class="limit-bar" id="limitBar">
         <span>🎯</span>
         <div class="progress"><div class="progress-fill" id="limitFill" style="width:0%"></div></div>
         <span style="font-size:13px;" id="limitText">0/5</span>
     </div>
-
     <button class="btn btn-gradient" onclick="showScreen('create')">🎯 Создать выбор</button>
     <button class="btn btn-outline" onclick="showTemplates()">📋 Готовые темы</button>
     <button class="btn btn-outline" onclick="showScreen('join')">🎁 Открыть конверт</button>
     <button class="btn btn-outline" onclick="showScreen('fun')">💰 Шуточный бюджет</button>
     <button class="btn btn-outline" onclick="showProfile()">👤 Профиль</button>
-
     <div class="card card-gold mt-16" id="vipPromo">
         <p style="font-weight:700;">💎 Premium</p>
         <p style="font-size:13px;color:var(--text2);">Безлимит, эксклюзивные темы, статистика</p>
@@ -282,7 +192,6 @@
     </div>
 </div>
 
-<!-- ==================== СОЗДАНИЕ ВЫБОРА ==================== -->
 <div id="create" class="screen">
     <div class="header">
         <button class="back-btn" onclick="showScreen('menu')">←</button>
@@ -295,7 +204,6 @@
     <button class="btn btn-primary mt-8" id="nextBtn" onclick="nextStep()">Продолжить →</button>
 </div>
 
-<!-- ==================== ПРИГЛАШЕНИЕ ==================== -->
 <div id="invite" class="screen">
     <div class="header">
         <button class="back-btn" onclick="showScreen('menu')">←</button>
@@ -310,12 +218,8 @@
     </div>
     <button class="btn btn-gradient" onclick="sendInvite()">📤 Отправить другу</button>
     <button class="btn btn-outline" onclick="copyCode()">📋 Скопировать код</button>
-    <p style="color:var(--text2);font-size:12px;text-align:center;margin-top:8px;">
-        Друг увидит красивое приглашение с кнопкой «Открыть»
-    </p>
 </div>
 
-<!-- ==================== ШАБЛОНЫ ==================== -->
 <div id="templates" class="screen">
     <div class="header">
         <button class="back-btn" onclick="showScreen('menu')">←</button>
@@ -324,7 +228,6 @@
     <div class="templates-grid" id="templatesGrid"></div>
 </div>
 
-<!-- ==================== КОНВЕРТЫ ==================== -->
 <div id="envelopes" class="screen">
     <div class="header">
         <button class="back-btn" onclick="showScreen('menu')">←</button>
@@ -342,7 +245,6 @@
     </div>
 </div>
 
-<!-- ==================== ВВОД КОДА ==================== -->
 <div id="join" class="screen">
     <div class="header">
         <button class="back-btn" onclick="showScreen('menu')">←</button>
@@ -354,7 +256,6 @@
     <p id="joinError" style="color:var(--red);text-align:center;margin-top:8px;" class="hidden"></p>
 </div>
 
-<!-- ==================== ШУТОЧНЫЙ БЮДЖЕТ ==================== -->
 <div id="fun" class="screen">
     <div class="header">
         <button class="back-btn" onclick="showScreen('menu')">←</button>
@@ -363,14 +264,11 @@
     <input type="number" id="budgetInput" placeholder="Сумма в рублях" style="font-size:20px;text-align:center;">
     <button class="btn btn-primary mt-8" onclick="calcFun()">🎲 Узнать варианты</button>
     <div id="funResult" class="hidden">
-        <div class="card mt-16 text-center" style="font-size:18px;">
-            <p id="funText"></p>
-        </div>
+        <div class="card mt-16 text-center" style="font-size:18px;"><p id="funText"></p></div>
         <button class="btn btn-outline btn-sm mt-8" onclick="shareFun()">📤 Поделиться</button>
     </div>
 </div>
 
-<!-- ==================== ПРОФИЛЬ ==================== -->
 <div id="profile" class="screen">
     <div class="header">
         <button class="back-btn" onclick="showScreen('menu')">←</button>
@@ -390,18 +288,15 @@
 </div>
 
 <script>
-    // ==================== TELEGRAM API ====================
     const tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
 
-    // ==================== НАСТРОЙКИ ====================
     const BOT_URL = 'https://blind-bot-production.up.railway.app/webapp';
     const BOT_USERNAME = 'SlepoyVibor_bot';
     const DAILY_LIMIT_FREE = 5;
     const DAILY_LIMIT_VIP = 999;
 
-    // ==================== ШАБЛОНЫ ====================
     const TEMPLATES = [
         { emoji: "🍽️", name: "Еда", opts: ["Пицца с ананасами 🍕", "Доширак с яйцом 🍜"] },
         { emoji: "☕", name: "Напитки", opts: ["Латте 🥤", "Капучино ☕"] },
@@ -415,7 +310,6 @@
         { emoji: "🎬", name: "Кино", opts: ["Боевик 💥", "Комедия 😂"] },
     ];
 
-    // ==================== БЮДЖЕТ ====================
     const FUN_BUDGET = [
         { max: 500, items: ["Доширак 🍜", "Жвачка 🍬", "Маршрутка 🚌", "Кофе 3в1 ☕"] },
         { max: 1000, items: ["Шаурма 🌯", "Кино 🎬", "Чипсы и кола 🥤", "Лотерея 🎫"] },
@@ -425,11 +319,9 @@
         { max: 9999999, items: ["Поездка 🏔️", "Аэротруба 💨", "Парашют 🪂", "Мишлен 🌟"] },
     ];
 
-    // ==================== СОСТОЯНИЕ ====================
     let step = 0, theme = '', opt1 = '', opt2 = '', code = '';
     let gameData = null, opened = false, funBudget = 0, funItems = [];
 
-    // ==================== НАВИГАЦИЯ ====================
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
@@ -440,44 +332,33 @@
     }
     function openBot() { tg.openTelegramLink('https://t.me/' + BOT_USERNAME); }
 
-    // ==================== ЛИМИТЫ ====================
-    function isVip() { return false; } // Заглушка для будущей монетизации
-
+    function isVip() { return false; }
     function getLimit() { return isVip() ? DAILY_LIMIT_VIP : DAILY_LIMIT_FREE; }
 
     function getTodayCount() {
         const stats = JSON.parse(localStorage.getItem('bs_stats') || '{}');
         return stats['day_' + new Date().toDateString()] || 0;
     }
-
     function incrementToday() {
         const stats = JSON.parse(localStorage.getItem('bs_stats') || '{}');
         const key = 'day_' + new Date().toDateString();
         stats[key] = (stats[key] || 0) + 1;
         localStorage.setItem('bs_stats', JSON.stringify(stats));
     }
-
     function updateLimitBar() {
         const used = getTodayCount(), limit = getLimit();
         document.getElementById('limitFill').style.width = (used / limit * 100) + '%';
         document.getElementById('limitText').textContent = used + '/' + limit;
-        const bar = document.getElementById('limitBar');
-        bar.classList.toggle('limit-reached', used >= limit);
+        document.getElementById('limitBar').classList.toggle('limit-reached', used >= limit);
     }
-
     function checkLimit() {
         if (getTodayCount() >= getLimit() && !isVip()) {
-            tg.showPopup({
-                title: '⛔ Лимит исчерпан',
-                message: 'Сегодня использовано 5/5 выборов.\n\n💎 Premium — безлимит!',
-                buttons: [{ type: 'ok', text: 'Понятно' }]
-            });
+            tg.showPopup({ title: '⛔ Лимит', message: '5/5 выборов сегодня.\n💎 Premium — безлимит!', buttons: [{ type: 'ok', text: 'Понятно' }] });
             return false;
         }
         return true;
     }
 
-    // ==================== СОЗДАНИЕ ====================
     function resetCreate() {
         step = 0; theme = ''; opt1 = ''; opt2 = '';
         document.getElementById('themeInput').value = '';
@@ -526,16 +407,11 @@
         spawnConfetti();
     }
 
-    // ==================== ШАБЛОНЫ ====================
     function showTemplates() {
         if (!checkLimit()) return;
         showScreen('templates');
-        const grid = document.getElementById('templatesGrid');
-        grid.innerHTML = TEMPLATES.map((t, i) =>
-            `<div class="template-card" onclick="useTemplate(${i})">
-                <div class="emoji">${t.emoji}</div>
-                <div class="name">${t.name}</div>
-            </div>`
+        document.getElementById('templatesGrid').innerHTML = TEMPLATES.map((t, i) =>
+            `<div class="template-card" onclick="useTemplate(${i})"><div class="emoji">${t.emoji}</div><div class="name">${t.name}</div></div>`
         ).join('');
     }
 
@@ -553,20 +429,18 @@
         spawnConfetti();
     }
 
-    // ==================== ПРИГЛАШЕНИЕ ====================
     function sendInvite() {
-        const inviteText = `🎲 *Слепой выбор!*\n\n📌 _Тема:_ *${gameData?.theme || '???'}*\n🔑 _Код:_ \`${code}\`\n\n👇 Нажми кнопку ниже чтобы открыть!`;
         const url = `https://t.me/${BOT_USERNAME}?start=${code}`;
-        tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(inviteText)}`);
+        const text = `🎲 *Слепой выбор!*\n\n📌 ${gameData?.theme || '???'}\n🔑 Код: ${code}\n\n👇 Нажми чтобы открыть!`;
+        tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
     }
 
     function copyCode() {
         navigator.clipboard.writeText(code).then(() => {
-            tg.showPopup({ title: '✅ Готово', message: 'Код скопирован! Отправь его другу.' });
+            tg.showPopup({ title: '✅', message: 'Код скопирован! Отправь другу.' });
         });
     }
 
-    // ==================== КОНВЕРТЫ ====================
     function joinGame() {
         const c = document.getElementById('codeInput').value.trim();
         if (!c || c.length !== 6) { showError('Введи 6-значный код'); return; }
@@ -585,8 +459,7 @@
 
     function openEnvelope(i) {
         if (opened || !gameData || gameData.done) return;
-        opened = true;
-        gameData.done = true;
+        opened = true; gameData.done = true;
         saveGame(code, gameData);
         incrementStat('opened');
         document.getElementById('env' + (i + 1)).classList.add('opened');
@@ -603,7 +476,6 @@
         document.getElementById('joinError').classList.remove('hidden');
     }
 
-    // ==================== БЮДЖЕТ ====================
     function calcFun() {
         const b = parseInt(document.getElementById('budgetInput').value);
         if (!b || b <= 0) { shakeEl(document.getElementById('budgetInput')); return; }
@@ -619,7 +491,6 @@
         tg.openTelegramLink(`https://t.me/share/url?url=&text=${encodeURIComponent(text)}`);
     }
 
-    // ==================== ПРОФИЛЬ ====================
     function showProfile() {
         showScreen('profile');
         document.getElementById('profileName').textContent = tg.initDataUnsafe?.user?.first_name || 'Игрок';
@@ -632,7 +503,6 @@
         document.getElementById('profileBadge').className = 'badge ' + (vip ? 'badge-vip' : 'badge-free');
     }
 
-    // ==================== ХРАНИЛИЩЕ ====================
     function saveGame(c, d) {
         const g = JSON.parse(localStorage.getItem('bs_games') || '{}');
         g[c] = d;
@@ -650,9 +520,8 @@
         localStorage.setItem('bs_stats', JSON.stringify(s));
     }
 
-    // ==================== КОНФЕТТИ ====================
     function spawnConfetti() {
-        const e = ['🎉','🎊','✨','🌟','💫','🎯','🎲','🎁','🔥','💎','🥳','🍾'];
+        const e = ['🎉','🎊','✨','🌟','💫','🎯','🎲','🎁','🔥','💎'];
         for (let i = 0; i < 25; i++) {
             setTimeout(() => {
                 const el = document.createElement('div');
@@ -660,7 +529,6 @@
                 el.textContent = e[Math.floor(Math.random() * e.length)];
                 el.style.left = Math.random() * 100 + '%';
                 el.style.animationDuration = (1.5 + Math.random() * 2.5) + 's';
-                el.style.animationDelay = Math.random() * 0.5 + 's';
                 document.body.appendChild(el);
                 setTimeout(() => el.remove(), 4000);
             }, i * 25);
@@ -672,8 +540,42 @@
         setTimeout(() => el.classList.remove('shaking'), 400);
     }
 
-    // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+    // ==================== АВТО-ОТКРЫТИЕ КОНВЕРТОВ ====================
+    function autoOpenByCode() {
+        let urlCode = null;
+        
+        // Способ 1: ?code=123456
+        const params = new URLSearchParams(window.location.search);
+        urlCode = params.get('code');
+        
+        // Способ 2: #/123456
+        if (!urlCode && window.location.hash) {
+            const hash = window.location.hash.replace('#/', '').replace('#', '');
+            if (hash.length === 6) urlCode = hash;
+        }
+        
+        if (urlCode && urlCode.length === 6) {
+            const game = getGame(urlCode);
+            if (game && !game.done) {
+                gameData = game;
+                code = urlCode;
+                document.getElementById('themeDisplay').textContent = '«' + game.theme + '»';
+                document.getElementById('resultBlock').classList.add('hidden');
+                document.getElementById('env1').classList.remove('opened', 'locked');
+                document.getElementById('env2').classList.remove('opened', 'locked');
+                opened = false;
+                showScreen('envelopes');
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // ==================== ЗАПУСК ====================
     updateLimitBar();
+    if (!autoOpenByCode()) {
+        showScreen('menu');
+    }
 </script>
 </body>
 </html>
