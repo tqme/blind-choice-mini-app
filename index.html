@@ -49,6 +49,7 @@
             margin-bottom: 10px; backdrop-filter: blur(20px);
         }
         .card-gold { border: 1px solid rgba(245,166,35,0.3); background: rgba(245,166,35,0.06); }
+        .card-vip { border: 1px solid rgba(245,166,35,0.5); background: rgba(245,166,35,0.1); }
         input {
             width: 100%; padding: 14px 16px; border-radius: 14px;
             border: 1px solid var(--border); background: rgba(255,255,255,0.04);
@@ -127,6 +128,7 @@
         .limit-bar .progress { flex: 1; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.1); overflow: hidden; }
         .limit-bar .progress-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width 0.3s; }
         .limit-bar.limit-reached .progress-fill { background: var(--red); }
+        .limit-bar.vip-bar .progress-fill { background: var(--gold); }
         .invite-card {
             background: linear-gradient(135deg, rgba(108,92,231,0.2), rgba(74,156,255,0.15));
             border: 1px solid rgba(108,92,231,0.4);
@@ -175,13 +177,14 @@
         <p style="font-size:13px;color:var(--text2);">Безлимит, эксклюзивные темы, статистика</p>
         <button class="btn btn-gold btn-sm mt-8" onclick="openBot()">Подключить в боте</button>
     </div>
+    <div class="card card-vip mt-8 hidden" id="vipActive">
+        <p style="font-weight:700;">💎 VIP Активен!</p>
+        <p style="font-size:13px;color:var(--text2);">♾️ Безлимит • Эксклюзивные темы • Статистика</p>
+    </div>
 </div>
 
 <div id="create" class="screen">
-    <div class="header">
-        <button class="back-btn" onclick="showScreen('menu')">←</button>
-        <h2>Создать выбор</h2>
-    </div>
+    <div class="header"><button class="back-btn" onclick="showScreen('menu')">←</button><h2>Создать выбор</h2></div>
     <p style="color:var(--text2);margin-bottom:12px;" id="stepInfo">Шаг 1 из 3 • Введи тему</p>
     <input type="text" id="themeInput" placeholder="Что выбираем? (например: Ужин)">
     <input type="text" id="opt1Input" class="hidden" placeholder="Вариант 1">
@@ -190,10 +193,7 @@
 </div>
 
 <div id="invite" class="screen">
-    <div class="header">
-        <button class="back-btn" onclick="showScreen('menu')">←</button>
-        <h2>Приглашение</h2>
-    </div>
+    <div class="header"><button class="back-btn" onclick="showScreen('menu')">←</button><h2>Приглашение</h2></div>
     <div class="invite-card">
         <div class="invite-emoji">🎲</div>
         <p style="color:var(--text2);">Слепой выбор</p>
@@ -206,18 +206,12 @@
 </div>
 
 <div id="templates" class="screen">
-    <div class="header">
-        <button class="back-btn" onclick="showScreen('menu')">←</button>
-        <h2>Готовые темы</h2>
-    </div>
+    <div class="header"><button class="back-btn" onclick="showScreen('menu')">←</button><h2>Готовые темы</h2></div>
     <div class="templates-grid" id="templatesGrid"></div>
 </div>
 
 <div id="envelopes" class="screen">
-    <div class="header">
-        <button class="back-btn" onclick="showScreen('menu')">←</button>
-        <h2>Выбор</h2>
-    </div>
+    <div class="header"><button class="back-btn" onclick="showScreen('menu')">←</button><h2>Выбор</h2></div>
     <p style="color:var(--text2);text-align:center;" id="themeDisplay"></p>
     <div class="envelope-container">
         <div class="envelope" id="env1" onclick="openEnvelope(0)">✉️</div>
@@ -231,10 +225,7 @@
 </div>
 
 <div id="join" class="screen">
-    <div class="header">
-        <button class="back-btn" onclick="showScreen('menu')">←</button>
-        <h2>Открыть конверт</h2>
-    </div>
+    <div class="header"><button class="back-btn" onclick="showScreen('menu')">←</button><h2>Открыть конверт</h2></div>
     <input type="text" id="codeInput" placeholder="Введи 6-значный код" maxlength="6"
            style="text-align:center;font-size:28px;letter-spacing:8px;font-weight:700;">
     <button class="btn btn-primary mt-8" onclick="joinGame()">🎁 Открыть</button>
@@ -242,10 +233,7 @@
 </div>
 
 <div id="fun" class="screen">
-    <div class="header">
-        <button class="back-btn" onclick="showScreen('menu')">←</button>
-        <h2>Шуточный бюджет</h2>
-    </div>
+    <div class="header"><button class="back-btn" onclick="showScreen('menu')">←</button><h2>Шуточный бюджет</h2></div>
     <input type="number" id="budgetInput" placeholder="Сумма в рублях" style="font-size:20px;text-align:center;">
     <button class="btn btn-primary mt-8" onclick="calcFun()">🎲 Узнать варианты</button>
     <div id="funResult" class="hidden">
@@ -255,10 +243,7 @@
 </div>
 
 <div id="profile" class="screen">
-    <div class="header">
-        <button class="back-btn" onclick="showScreen('menu')">←</button>
-        <h2>Профиль</h2>
-    </div>
+    <div class="header"><button class="back-btn" onclick="showScreen('menu')">←</button><h2>Профиль</h2></div>
     <div class="card text-center">
         <p style="font-size:40px;">👤</p>
         <p style="font-size:20px;font-weight:700;" id="profileName"></p>
@@ -268,7 +253,7 @@
         <div class="stat-row"><span class="stat-label">🎯 Создано игр</span><span class="stat-value" id="profileCreated">0</span></div>
         <div class="stat-row"><span class="stat-label">🎁 Открыто конвертов</span><span class="stat-value" id="profileOpened">0</span></div>
         <div class="stat-row"><span class="stat-label">📅 Сегодня</span><span class="stat-value" id="profileToday">0</span></div>
-        <div class="stat-row"><span class="stat-label">💎 Статус</span><span class="stat-value" id="profileVip">Free</span></div>
+        <div class="stat-row"><span class="stat-label">💎 Статус</span><span class="stat-value" id="profileVip">Проверка...</span></div>
     </div>
 </div>
 
@@ -278,10 +263,61 @@
     tg.expand();
 
     const BOT_URL = 'https://blind-bot-production.up.railway.app/webapp';
+    const VIP_CHECK_URL = 'https://blind-bot-production.up.railway.app/check_vip';
     const BOT_USERNAME = 'SlepoyVibor_bot';
     const DAILY_LIMIT_FREE = 5;
     const DAILY_LIMIT_VIP = 999;
 
+    // ==================== VIP СТАТУС ====================
+    let cachedVip = false;
+    let vipChecked = false;
+
+    async function checkVipStatus() {
+        if (vipChecked) return cachedVip;
+        try {
+            const response = await fetch(`${VIP_CHECK_URL}?initData=${encodeURIComponent(tg.initData)}`);
+            const data = await response.json();
+            cachedVip = data.vip || false;
+        } catch(e) {
+            console.log('VIP check failed:', e);
+            cachedVip = false;
+        }
+        vipChecked = true;
+        updateVipUI();
+        return cachedVip;
+    }
+
+    function isVip() { return cachedVip; }
+
+    function updateVipUI() {
+        const vip = isVip();
+        document.getElementById('vipPromo').classList.toggle('hidden', vip);
+        document.getElementById('vipActive').classList.toggle('hidden', !vip);
+        
+        const bar = document.getElementById('limitBar');
+        bar.classList.toggle('vip-bar', vip);
+        
+        const limit = vip ? DAILY_LIMIT_VIP : DAILY_LIMIT_FREE;
+        const used = getTodayCount();
+        document.getElementById('limitText').textContent = vip ? `${used}/♾️` : `${used}/${limit}`;
+        document.getElementById('limitFill').style.width = vip ? '100%' : (used / limit * 100) + '%';
+        
+        // Обновляем профиль если открыт
+        if (document.getElementById('profile').classList.contains('active')) {
+            updateProfileUI();
+        }
+    }
+
+    function updateProfileUI() {
+        const vip = isVip();
+        document.getElementById('profileVip').textContent = vip ? '💎 VIP' : 'Free';
+        document.getElementById('profileBadge').textContent = vip ? '💎 VIP' : 'Free';
+        document.getElementById('profileBadge').className = 'badge ' + (vip ? 'badge-vip' : 'badge-free');
+        const limit = vip ? DAILY_LIMIT_VIP : DAILY_LIMIT_FREE;
+        document.getElementById('profileToday').textContent = getTodayCount() + '/' + (vip ? '♾️' : limit);
+    }
+
+    // ==================== ШАБЛОНЫ ====================
     const TEMPLATES = [
         { emoji: "🍽️", name: "Еда", opts: ["Пицца с ананасами 🍕", "Доширак с яйцом 🍜"] },
         { emoji: "☕", name: "Напитки", opts: ["Латте 🥤", "Капучино ☕"] },
@@ -317,7 +353,6 @@
     }
     function openBot() { tg.openTelegramLink('https://t.me/' + BOT_USERNAME); }
 
-    function isVip() { return false; }
     function getLimit() { return isVip() ? DAILY_LIMIT_VIP : DAILY_LIMIT_FREE; }
 
     function getTodayCount() {
@@ -331,13 +366,13 @@
         localStorage.setItem('bs_stats', JSON.stringify(stats));
     }
     function updateLimitBar() {
-        const used = getTodayCount(), limit = getLimit();
-        document.getElementById('limitFill').style.width = (used / limit * 100) + '%';
-        document.getElementById('limitText').textContent = used + '/' + limit;
-        document.getElementById('limitBar').classList.toggle('limit-reached', used >= limit);
+        const used = getTodayCount(), limit = getLimit(), vip = isVip();
+        document.getElementById('limitFill').style.width = vip ? '100%' : (used / limit * 100) + '%';
+        document.getElementById('limitText').textContent = vip ? `${used}/♾️` : `${used}/${limit}`;
+        document.getElementById('limitBar').classList.toggle('limit-reached', !vip && used >= limit);
     }
     function checkLimit() {
-        if (getTodayCount() >= getLimit() && !isVip()) {
+        if (!isVip() && getTodayCount() >= getLimit()) {
             tg.showPopup({ title: '⛔ Лимит', message: '5/5 выборов сегодня.\n💎 Premium — безлимит!', buttons: [{ type: 'ok', text: 'Понятно' }] });
             return false;
         }
@@ -476,16 +511,13 @@
         tg.openTelegramLink(`https://t.me/share/url?url=&text=${encodeURIComponent(text)}`);
     }
 
-    function showProfile() {
+    async function showProfile() {
+        await checkVipStatus();
         showScreen('profile');
         document.getElementById('profileName').textContent = tg.initDataUnsafe?.user?.first_name || 'Игрок';
         document.getElementById('profileCreated').textContent = getStat('created');
         document.getElementById('profileOpened').textContent = getStat('opened');
-        document.getElementById('profileToday').textContent = getTodayCount() + '/' + getLimit();
-        const vip = isVip();
-        document.getElementById('profileVip').textContent = vip ? '💎 VIP' : 'Free';
-        document.getElementById('profileBadge').textContent = vip ? '💎 VIP' : 'Free';
-        document.getElementById('profileBadge').className = 'badge ' + (vip ? 'badge-vip' : 'badge-free');
+        updateProfileUI();
     }
 
     function saveGame(c, d) {
@@ -550,10 +582,13 @@
         return false;
     }
 
-    updateLimitBar();
-    setTimeout(() => {
-        if (!autoOpenByCode()) showScreen('menu');
-    }, 500);
+    // ==================== ЗАПУСК ====================
+    checkVipStatus().then(() => {
+        updateLimitBar();
+        setTimeout(() => {
+            if (!autoOpenByCode()) showScreen('menu');
+        }, 300);
+    });
 </script>
 </body>
 </html>
