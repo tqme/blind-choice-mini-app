@@ -5,74 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root {
-            --bg: #0a0a14; --card: rgba(255,255,255,0.04); --border: rgba(255,255,255,0.08);
-            --accent: #4A9CFF; --accent2: #6C5CE7; --gold: #F5A623; --green: #2ECC71;
-            --red: #E74C3C; --text: #FFFFFF; --text2: #9B9BB4; --radius: 18px;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--bg); color: var(--text);
-            min-height: 100vh; padding: 12px 16px 30px;
-        }
-        .screen { display: none; }
-        .screen.active { display: block; animation: fadeIn 0.25s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
-        .back-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); color: var(--text); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .header h2 { font-size: 19px; font-weight: 700; flex: 1; text-align: left; }
-        .logo { font-size: 42px; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 16px; margin-bottom: 10px; }
-        .card-gold { border: 1px solid rgba(245,166,35,0.3); background: rgba(245,166,35,0.06); }
-        .card-vip { border: 1px solid rgba(245,166,35,0.5); background: rgba(245,166,35,0.1); }
-        input { width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: var(--text); font-size: 16px; margin: 6px 0; outline: none; }
-        input:focus { border-color: var(--accent); }
-        input::placeholder { color: var(--text2); }
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer; margin: 5px 0; }
-        .btn:active { transform: scale(0.98); }
-        .btn-primary { background: var(--accent); color: white; }
-        .btn-gradient { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; }
-        .btn-gold { background: linear-gradient(135deg, #F5A623, #F7B84E); color: #000; }
-        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
-        .btn-sm { padding: 10px 16px; font-size: 14px; width: auto; display: inline-block; }
-        .envelope-container { display: flex; gap: 20px; justify-content: center; margin: 24px 0; }
-        .envelope { width: 140px; height: 108px; background: linear-gradient(160deg, #F5A623, #E8961A); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 48px; cursor: pointer; border: 2.5px dashed #C77D10; box-shadow: 0 8px 32px rgba(245,166,35,0.25); }
-        .envelope:active { transform: scale(0.94); }
-        .envelope.opened { background: linear-gradient(160deg, #2ECC71, #27AE60); border-color: #1E8449; animation: popOpen 0.5s ease; }
-        .envelope.locked { opacity: 0.3; cursor: not-allowed; background: #2a2a3a; border-color: #3a3a4a; }
-        @keyframes popOpen { 0%{transform:scale(1)} 30%{transform:scale(1.15) rotate(-3deg)} 60%{transform:scale(0.95) rotate(2deg)} 100%{transform:scale(1)} }
-        @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
-        .shaking { animation: shake 0.4s ease; }
-        .result-block { background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.3); border-radius: var(--radius); padding: 18px; margin: 16px 0; text-align: center; }
-        .chosen { font-size: 22px; font-weight: 700; color: var(--green); }
-        .code-display { font-size: 34px; font-weight: 800; letter-spacing: 8px; color: var(--gold); }
-        .templates-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
-        .template-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 10px; cursor: pointer; text-align: center; }
-        .template-card:active { background: rgba(74,156,255,0.15); }
-        .template-card .emoji { font-size: 30px; }
-        .template-card .name { font-size: 13px; margin-top: 4px; font-weight: 600; }
-        .limit-bar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 14px; margin: 8px 0; background: var(--card); border: 1px solid var(--border); }
-        .limit-bar .progress { flex: 1; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.1); overflow: hidden; }
-        .limit-bar .progress-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width 0.3s; }
-        .limit-bar.limit-reached .progress-fill { background: var(--red); }
-        .limit-bar.vip-bar .progress-fill { background: var(--gold); }
-        .invite-card { background: linear-gradient(135deg, rgba(108,92,231,0.2), rgba(74,156,255,0.15)); border: 1px solid rgba(108,92,231,0.4); border-radius: var(--radius); padding: 20px; text-align: center; margin: 12px 0; }
-        .game-theme { font-size: 20px; font-weight: 700; margin: 8px 0; }
-        .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-        .badge-vip { background: linear-gradient(135deg, #F5A623, #FFD700); color: #000; }
-        .badge-free { background: rgba(255,255,255,0.1); color: var(--text2); }
-        .confetti-piece { position: fixed; top: -10px; font-size: 22px; animation: confettiFall linear forwards; z-index: 9999; pointer-events: none; }
-        @keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
-        .stat-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); }
-        .stat-value { font-weight: 700; font-size: 18px; }
-        .stat-label { color: var(--text2); font-size: 14px; }
-        .text-center { text-align: center; }
-        .mt-8 { margin-top: 8px; }
-        .mt-16 { margin-top: 16px; }
-        .hidden { display: none !important; }
-        .loader { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--accent); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        /* Стили остались без изменений для экономии места, используйте ваши оригинальные стили */
+        :root { --bg: #0a0a14; --card: rgba(255,255,255,0.04); --border: rgba(255,255,255,0.08); --accent: #4A9CFF; --accent2: #6C5CE7; --gold: #F5A623; --green: #2ECC71; --red: #E74C3C; --text: #FFFFFF; --text2: #9B9BB4; --radius: 18px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 12px 16px 30px; } .screen { display: none; } .screen.active { display: block; animation: fadeIn 0.25s ease; } @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } } .header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); } .back-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); color: var(--text); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; } .header h2 { font-size: 19px; font-weight: 700; flex: 1; text-align: left; } .logo { font-size: 42px; } .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 16px; margin-bottom: 10px; } .card-gold { border: 1px solid rgba(245,166,35,0.3); background: rgba(245,166,35,0.06); } .card-vip { border: 1px solid rgba(245,166,35,0.5); background: rgba(245,166,35,0.1); } input { width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: var(--text); font-size: 16px; margin: 6px 0; outline: none; } input:focus { border-color: var(--accent); } input::placeholder { color: var(--text2); } .btn { width: 100%; padding: 15px; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer; margin: 5px 0; } .btn:active { transform: scale(0.98); } .btn-primary { background: var(--accent); color: white; } .btn-gradient { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; } .btn-gold { background: linear-gradient(135deg, #F5A623, #F7B84E); color: #000; } .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); } .btn-sm { padding: 10px 16px; font-size: 14px; width: auto; display: inline-block; } .envelope-container { display: flex; gap: 20px; justify-content: center; margin: 24px 0; } .envelope { width: 140px; height: 108px; background: linear-gradient(160deg, #F5A623, #E8961A); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 48px; cursor: pointer; border: 2.5px dashed #C77D10; box-shadow: 0 8px 32px rgba(245,166,35,0.25); } .envelope:active { transform: scale(0.94); } .envelope.opened { background: linear-gradient(160deg, #2ECC71, #27AE60); border-color: #1E8449; animation: popOpen 0.5s ease; } .envelope.locked { opacity: 0.3; cursor: not-allowed; background: #2a2a3a; border-color: #3a3a4a; } @keyframes popOpen { 0%{transform:scale(1)} 30%{transform:scale(1.15) rotate(-3deg)} 60%{transform:scale(0.95) rotate(2deg)} 100%{transform:scale(1)} } @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} } .shaking { animation: shake 0.4s ease; } .result-block { background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.3); border-radius: var(--radius); padding: 18px; margin: 16px 0; text-align: center; } .chosen { font-size: 22px; font-weight: 700; color: var(--green); } .code-display { font-size: 34px; font-weight: 800; letter-spacing: 8px; color: var(--gold); } .templates-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; } .template-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 10px; cursor: pointer; text-align: center; } .template-card:active { background: rgba(74,156,255,0.15); } .template-card .emoji { font-size: 30px; } .template-card .name { font-size: 13px; margin-top: 4px; font-weight: 600; } .limit-bar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 14px; margin: 8px 0; background: var(--card); border: 1px solid var(--border); } .limit-bar .progress { flex: 1; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.1); overflow: hidden; } .limit-bar .progress-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width 0.3s; } .limit-bar.limit-reached .progress-fill { background: var(--red); } .limit-bar.vip-bar .progress-fill { background: var(--gold); } .invite-card { background: linear-gradient(135deg, rgba(108,92,231,0.2), rgba(74,156,255,0.15)); border: 1px solid rgba(108,92,231,0.4); border-radius: var(--radius); padding: 20px; text-align: center; margin: 12px 0; } .game-theme { font-size: 20px; font-weight: 700; margin: 8px 0; } .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; } .badge-vip { background: linear-gradient(135deg, #F5A623, #FFD700); color: #000; } .badge-free { background: rgba(255,255,255,0.1); color: var(--text2); } .confetti-piece { position: fixed; top: -10px; font-size: 22px; animation: confettiFall linear forwards; z-index: 9999; pointer-events: none; } @keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } } .stat-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); } .stat-value { font-weight: 700; font-size: 18px; } .stat-label { color: var(--text2); font-size: 14px; } .text-center { text-align: center; } .mt-8 { margin-top: 8px; } .mt-16 { margin-top: 16px; } .hidden { display: none !important; } .loader { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--accent); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; } @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -143,7 +78,6 @@
     <div class="card text-center"><p style="font-size:40px;">👤</p><p style="font-size:20px;font-weight:700;" id="profileName"></p><span class="badge badge-free" id="profileBadge">Free</span></div>
     <div class="card mt-8">
         <div class="stat-row"><span class="stat-label">🎯 Создано игр</span><span class="stat-value" id="profileCreated">0</span></div>
-        <div class="stat-row"><span class="stat-label">🎁 Открыто конвертов</span><span class="stat-value" id="profileOpened">0</span></div>
         <div class="stat-row"><span class="stat-label">📅 Сегодня</span><span class="stat-value" id="profileToday">0</span></div>
         <div class="stat-row"><span class="stat-label">💎 Статус</span><span class="stat-value" id="profileVip">Проверка...</span></div>
     </div>
@@ -153,112 +87,81 @@
 
 <script>
     const tg = window.Telegram.WebApp;
-    tg.ready(); tg.expand();
+    tg.ready(); 
+    tg.expand();
 
-    const API_BASE = 'https://blind-bot-production.up.railway.app';
+    // ⚠️ ЗАМЕНИТЕ НА ВАШ РЕАЛЬНЫЙ URL BACKEND
+    const API_BASE = 'https://blind-bot-production.up.railway.app'; 
     const BOT_USERNAME = 'SlepoyVibor_bot';
-    const DAILY_LIMIT_FREE = 5;
-    const DAILY_LIMIT_VIP = 999;
 
-    const TEMPLATES = [
-        { emoji: "🍽️", name: "Еда", opts: ["Пицца с ананасами 🍕", "Доширак с яйцом 🍜"] },
-        { emoji: "☕", name: "Напитки", opts: ["Латте 🥤", "Капучино ☕"] },
-        { emoji: "📅", name: "Понедельник", opts: ["Дела 💪", "Больничный 🤒"] },
-        { emoji: "🧹", name: "Уборка", opts: ["Помыть посуду 🍽️", "Оставить на завтра 🗓️"] },
-        { emoji: "🚍", name: "Транспорт", opts: ["Такси 🚕", "Пешком 🚶"] },
-        { emoji: "💔", name: "Свидание", opts: ["McDonald's 🍔", "Покормить уток 🦆"] },
-        { emoji: "💸", name: "Зарплата", opts: ["Шопинг 🛍️", "Отложить 💰"] },
-        { emoji: "🍻", name: "Вечер", opts: ["Тусовка 🎉", "Сериал 📺"] },
-        { emoji: "🏃", name: "Спорт", opts: ["Зал 🏋️", "Диван 🛋️"] },
-        { emoji: "🎬", name: "Кино", opts: ["Боевик 💥", "Комедия 😂"] },
-    ];
-
-    const FUN_BUDGET = [
-        { max: 500, items: ["Доширак 🍜", "Жвачка 🍬"] },
-        { max: 1000, items: ["Шаурма 🌯", "Кино 🎬"] },
-        { max: 3000, items: ["Пицца 🍕", "Бургер 🍔"] },
-        { max: 5000, items: ["Ресторан 🍷", "Караоке 🎤"] },
-        { max: 10000, items: ["Концерт 🎸", "СПА 💆"] },
-        { max: 9999999, items: ["Поездка 🏔️", "Аэротруба 💨"] },
-    ];
-
-    let cachedVip = false, vipChecked = false;
+    let serverStats = { vip: false, used: 0, limit: 5, total: 0 };
     let step = 0, theme = '', opt1 = '', opt2 = '', code = '';
-    let gameData = null, opened = false, funBudget = 0, funItems = [];
+    let opened = false;
 
     async function apiCall(method, path, body = null) {
         try {
             const options = { method, headers: { 'Content-Type': 'application/json' } };
-            if (body) options.body = JSON.stringify({ ...body, initData: tg.initData });
-            const url = path.includes('?') ? `${API_BASE}${path}&initData=${encodeURIComponent(tg.initData)}` : `${API_BASE}${path}?initData=${encodeURIComponent(tg.initData)}`;
+            // Всегда передаем initData для проверки подписи на сервере
+            const safeInitData = tg.initData || "";
+            
+            if (body) {
+                options.body = JSON.stringify({ ...body, initData: safeInitData });
+            }
+            
+            const separator = path.includes('?') ? '&' : '?';
+            const url = `${API_BASE}${path}${separator}initData=${encodeURIComponent(safeInitData)}`;
+            
             const response = await fetch(url, options);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             return await response.json();
         } catch(e) {
             console.error('API Error:', e);
+            tg.showPopup({ title: '❌ Ошибка', message: 'Не удалось связаться с сервером' });
             return { error: true, message: 'Ошибка соединения' };
         }
     }
 
-    async function checkVipStatus() {
-        if (vipChecked) return cachedVip;
+    async function syncWithServer() {
         const data = await apiCall('GET', '/check_vip');
-        cachedVip = data.vip || false;
-        vipChecked = true;
-        updateVipUI();
-        return cachedVip;
+        if (!data.error) {
+            serverStats = data;
+            updateUIFromServer();
+        }
+        return !data.error;
     }
 
-    function isVip() { return cachedVip; }
-
-    function updateVipUI() {
-        const vip = isVip();
+    function updateUIFromServer() {
+        const { vip, used, limit, total } = serverStats;
+        
+        // Обновляем лимит-бар
         document.getElementById('vipPromo').classList.toggle('hidden', vip);
         document.getElementById('vipActive').classList.toggle('hidden', !vip);
         document.getElementById('limitBar').classList.toggle('vip-bar', vip);
-        const limit = vip ? DAILY_LIMIT_VIP : DAILY_LIMIT_FREE;
-        const used = getTodayCount();
+        document.getElementById('limitBar').classList.toggle('limit-reached', !vip && used >= limit);
+        
+        const pct = vip ? 100 : Math.min((used / limit) * 100, 100);
+        document.getElementById('limitFill').style.width = `${pct}%`;
         document.getElementById('limitText').textContent = vip ? `${used}/♾️` : `${used}/${limit}`;
-        document.getElementById('limitFill').style.width = vip ? '100%' : (used / limit * 100) + '%';
-        if (document.getElementById('profile').classList.contains('active')) updateProfileUI();
-    }
 
-    function updateProfileUI() {
-        const vip = isVip();
-        document.getElementById('profileVip').textContent = vip ? '💎 VIP' : 'Free';
-        document.getElementById('profileBadge').textContent = vip ? '💎 VIP' : 'Free';
-        document.getElementById('profileBadge').className = 'badge ' + (vip ? 'badge-vip' : 'badge-free');
-        document.getElementById('profileToday').textContent = getTodayCount() + '/' + (vip ? '♾️' : DAILY_LIMIT_FREE);
+        // Обновляем профиль если открыт
+        if (document.getElementById('profile').classList.contains('active')) {
+            document.getElementById('profileVip').textContent = vip ? '💎 VIP' : 'Free';
+            document.getElementById('profileBadge').textContent = vip ? '💎 VIP' : 'Free';
+            document.getElementById('profileBadge').className = 'badge ' + (vip ? 'badge-vip' : 'badge-free');
+            document.getElementById('profileToday').textContent = `${used}/${vip ? '♾️' : limit}`;
+            document.getElementById('profileCreated').textContent = total;
+        }
     }
 
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        if (id === 'menu') updateLimitBar();
         if (id === 'create') resetCreate();
         if (id === 'join') { document.getElementById('codeInput').value = ''; document.getElementById('joinError').classList.add('hidden'); }
         if (id === 'fun') { document.getElementById('budgetInput').value = ''; document.getElementById('funResult').classList.add('hidden'); }
     }
 
     function openBot() { tg.openTelegramLink('https://t.me/' + BOT_USERNAME); }
-
-    function getLimit() { return isVip() ? DAILY_LIMIT_VIP : DAILY_LIMIT_FREE; }
-
-    function getTodayCount() {
-        return JSON.parse(localStorage.getItem('bs_stats') || '{}')['day_' + new Date().toDateString()] || 0;
-    }
-    function incrementToday() {
-        const s = JSON.parse(localStorage.getItem('bs_stats') || '{}');
-        const k = 'day_' + new Date().toDateString();
-        s[k] = (s[k] || 0) + 1;
-        localStorage.setItem('bs_stats', JSON.stringify(s));
-    }
-
-    function updateLimitBar() {
-        const used = getTodayCount(), limit = getLimit(), vip = isVip();
-        document.getElementById('limitFill').style.width = vip ? '100%' : (used / limit * 100) + '%';
-        document.getElementById('limitText').textContent = vip ? `${used}/♾️` : `${used}/${limit}`;
-        document.getElementById('limitBar').classList.toggle('limit-reached', !vip && used >= limit);
-    }
 
     function resetCreate() {
         step = 0; theme = ''; opt1 = ''; opt2 = '';
@@ -296,11 +199,20 @@
     }
 
     async function finishCreation() {
+        // Проверяем лимит ПЕРЕД созданием
+        if (!serverStats.vip && serverStats.used >= serverStats.limit) {
+            tg.showPopup({ title: '⛔ Лимит', message: 'Исчерпан дневной лимит. Купите VIP!' });
+            showScreen('menu');
+            return;
+        }
+
         showScreen('loading');
         const data = await apiCall('POST', '/create_game', { theme, opt1, opt2 });
+        
         if (data.status === 'ok') {
             code = data.code;
-            incrementToday();
+            // Сразу обновляем статистику с сервера
+            await syncWithServer(); 
             document.getElementById('inviteTheme').textContent = data.theme;
             document.getElementById('inviteCode').textContent = code;
             showScreen('invite');
@@ -311,6 +223,19 @@
         }
     }
 
+    const TEMPLATES = [
+        { emoji: "🍽️", name: "Еда", opts: ["Пицца с ананасами 🍕", "Доширак с яйцом 🍜"] },
+        { emoji: "☕", name: "Напитки", opts: ["Латте 🥤", "Капучино ☕"] },
+        { emoji: "📅", name: "Понедельник", opts: ["Дела 💪", "Больничный 🤒"] },
+        { emoji: "🧹", name: "Уборка", opts: ["Помыть посуду 🍽️", "Оставить на завтра 🗓️"] },
+        { emoji: "🚍", name: "Транспорт", opts: ["Такси 🚕", "Пешком 🚶"] },
+        { emoji: "💔", name: "Свидание", opts: ["McDonald's 🍔", "Покормить уток 🦆"] },
+        { emoji: "💸", name: "Зарплата", opts: ["Шопинг 🛍️", "Отложить 💰"] },
+        { emoji: "🍻", name: "Вечер", opts: ["Тусовка 🎉", "Сериал 📺"] },
+        { emoji: "🏃", name: "Спорт", opts: ["Зал 🏋️", "Диван 🛋️"] },
+        { emoji: "🎬", name: "Кино", opts: ["Боевик 💥", "Комедия 😂"] },
+    ];
+
     function showTemplates() {
         showScreen('templates');
         document.getElementById('templatesGrid').innerHTML = TEMPLATES.map((t, i) =>
@@ -319,16 +244,24 @@
     }
 
     async function useTemplate(i) {
+        if (!serverStats.vip && serverStats.used >= serverStats.limit) {
+            tg.showPopup({ title: '⛔ Лимит', message: 'Исчерпан дневной лимит.' });
+            showScreen('menu');
+            return;
+        }
         showScreen('loading');
         const t = TEMPLATES[i];
         const data = await apiCall('POST', '/create_game', { theme: t.name, opt1: t.opts[0], opt2: t.opts[1] });
         if (data.status === 'ok') {
             code = data.code;
-            incrementToday();
+            await syncWithServer();
             document.getElementById('inviteTheme').textContent = data.theme;
             document.getElementById('inviteCode').textContent = code;
             showScreen('invite');
             spawnConfetti();
+        } else {
+            showScreen('menu');
+            tg.showPopup({ title: '❌', message: data.message });
         }
     }
 
@@ -368,6 +301,7 @@
         opened = true;
         document.getElementById('env' + (i + 1)).classList.add('opened');
         document.getElementById('env' + (2 - i)).classList.add('locked');
+        
         const data = await apiCall('POST', '/open_envelope', { code, index: i });
         if (data.status === 'ok') {
             setTimeout(() => {
@@ -375,6 +309,9 @@
                 document.getElementById('resultBlock').classList.remove('hidden');
                 spawnConfetti();
             }, 500);
+        } else {
+            tg.showPopup({ title: '❌', message: data.message });
+            showScreen('menu');
         }
     }
 
@@ -383,34 +320,40 @@
         document.getElementById('joinError').classList.remove('hidden');
     }
 
+    const FUN_BUDGET = [
+        { max: 500, items: ["Доширак 🍜", "Жвачка 🍬"] },
+        { max: 1000, items: ["Шаурма 🌯", "Кино 🎬"] },
+        { max: 3000, items: ["Пицца 🍕", "Бургер 🍔"] },
+        { max: 5000, items: ["Ресторан 🍷", "Караоке 🎤"] },
+        { max: 10000, items: ["Концерт 🎸", "СПА 💆"] },
+        { max: 9999999, items: ["Поездка 🏔️", "Аэротруба 💨"] },
+    ];
+
     function calcFun() {
         const b = parseInt(document.getElementById('budgetInput').value);
         if (!b || b <= 0) return shakeEl(document.getElementById('budgetInput'));
-        funBudget = b;
         const tier = FUN_BUDGET.find(t => b <= t.max) || FUN_BUDGET[FUN_BUDGET.length - 1];
-        funItems = tier.items.sort(() => Math.random() - 0.5).slice(0, 2);
+        const funItems = tier.items.sort(() => Math.random() - 0.5).slice(0, 2);
         document.getElementById('funText').innerHTML = `💸 <b>${b}₽</b><br><br>🎲 ${funItems[0]}<br><span style="color:var(--text2);">или</span><br>🎲 ${funItems[1]}`;
         document.getElementById('funResult').classList.remove('hidden');
     }
 
     function shareFun() {
-        tg.openTelegramLink(`https://t.me/share/url?url=&text=${encodeURIComponent(`💰 Бюджет: ${funBudget}₽\n🎲 ${funItems[0]} или ${funItems[1]}`)}`);
+        const b = document.getElementById('budgetInput').value;
+        tg.openTelegramLink(`https://t.me/share/url?url=&text=${encodeURIComponent(`💰 Бюджет: ${b}₽\n🎲 Попробуй Слепой выбор!`)}`);
     }
 
     async function showProfile() {
-        await checkVipStatus();
+        await syncWithServer();
         showScreen('profile');
         document.getElementById('profileName').textContent = tg.initDataUnsafe?.user?.first_name || 'Игрок';
-        document.getElementById('profileCreated').textContent = JSON.parse(localStorage.getItem('bs_stats') || '{}')['created'] || 0;
-        document.getElementById('profileOpened').textContent = JSON.parse(localStorage.getItem('bs_stats') || '{}')['opened'] || 0;
-        updateProfileUI();
+        updateUIFromServer();
     }
 
     async function autoOpenByCode() {
         let urlCode = null;
         const params = new URLSearchParams(window.location.search);
-        urlCode = params.get('startapp');
-        if (!urlCode) urlCode = params.get('code');
+        urlCode = params.get('startapp') || params.get('code');
         if (urlCode && urlCode.length === 6) {
             showScreen('loading');
             const data = await apiCall('GET', `/get_game?code=${urlCode}`);
@@ -445,12 +388,11 @@
 
     function shakeEl(el) { el.classList.add('shaking'); setTimeout(() => el.classList.remove('shaking'), 400); }
 
-    checkVipStatus().then(() => {
-        updateLimitBar();
-        setTimeout(async () => {
-            if (!await autoOpenByCode()) showScreen('menu');
-        }, 400);
+    // Инициализация
+    syncWithServer().then(async () => {
+        if (!await autoOpenByCode()) showScreen('menu');
     });
 </script>
 </body>
 </html>
+
