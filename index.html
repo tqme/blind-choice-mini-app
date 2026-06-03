@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: white;
+            min-height: 100vh;
+            padding: 15px;
+            text-align: center;
+        }
+        .screen { display: none; }
+        .screen.active { display: block; }
+        
+        h1 { font-size: 22px; margin: 10px 0; }
+        .emoji-big { font-size: 50px; }
+        .subtitle { color: #aaa; font-size: 14px; margin-bottom: 15px; }
+
+        .card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 15px;
+            margin: 5px 0;
+            outline: none;
+        }
+        input::placeholder { color: #888; }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 6px 0;
+            transition: all 0.2s;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: #2AABEE; color: white; }
+        .btn-secondary { background: rgba(255,255,255,0.15); color: white; }
+
+        .envelope-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .envelope {
+            width: 130px;
+            height: 100px;
+            background: linear-gradient(145deg, #e8c96a, #d4a853);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            border: 3px dashed #b8922e;
+        }
+        .envelope:hover { transform: translateY(-5px); }
+        .envelope.opened {
+            background: linear-gradient(145deg, #2ecc71, #27ae60);
+            border-color: #1e8449;
+            animation: openAnim 0.5s ease;
+        }
+        .envelope.locked { opacity: 0.4; cursor: not-allowed; background: #555; border-color: #333; }
+        
+        @keyframes openAnim {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2) rotate(5deg); }
+            100% { transform: scale(1); }
+        }
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .shaking { animation: shake 0.3s ease; }
+
+        .result-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+        .code-box {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            color: #FFD700;
+            padding: 10px;
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- ГЛАВНОЕ МЕНЮ -->
+    <div id="menu" class="screen active">
+        <div class="emoji-big">🎭</div>
+        <h1>СЛЕПОЙ ВЫБОР</h1>
+        <p class="subtitle">Принимай решения с друзьями!</p>
+        <button class="btn btn-primary" onclick="showCreate()">🎯 Создать выбор</button>
+        <button class="btn btn-secondary" onclick="showJoin()">🎁 Открыть конверт</button>
+        <button class="btn btn-secondary" onclick="openBot()">💬 Открыть бота</button>
+    </div>
+
+    <!-- СОЗДАНИЕ ВЫБОРА -->
+    <div id="create" class="screen">
+        <h2>🎯 Создать выбор</h2>
+        <p class="subtitle" id="stepInfo">Шаг 1 из 3: Введи тему</p>
+        <div class="card">
+            <input type="text" id="themeInput" placeholder="Например: Что заказать на ужин?">
+            <input type="text" id="opt1Input" class="hidden" placeholder="Вариант 1: Пицца 🍕">
+            <input type="text" id="opt2Input" class="hidden" placeholder="Вариант 2: Суши 🍣">
+        </div>
+        <button class="btn btn-primary" id="nextBtn" onclick="nextStep()">Далее ➡️</button>
+        <button class="btn btn-secondary" onclick="goToMenu()">⬅️ Назад</button>
+    </div>
+
+    <!-- КОНВЕРТЫ -->
+    <div id="envelopes" class="screen">
+        <h2>📨 Выбери конверт!</h2>
+        <p class="subtitle" id="themeDisplay"></p>
+        <div class="envelope-container">
+            <div class="envelope" id="env1" onclick="openEnvelope(0)">📩</div>
+            <div class="envelope" id="env2" onclick="openEnvelope(1)">📩</div>
+        </div>
+        <div id="resultBlock" class="hidden">
+            <p class="result-text" id="resultText"></p>
+            <button class="btn btn-primary" onclick="goToMenu()">🏠 В меню</button>
+        </div>
+    </div>
+
+    <!-- ВЫБОР СОЗДАН -->
+    <div id="created" class="screen">
+        <h2>✅ Выбор создан!</h2>
+        <div class="card">
+            <p>Код для друга:</p>
+            <p class="code-box" id="codeDisplay">------</p>
+            <p id="createdTheme" style="color:#aaa;"></p>
+        </div>
+        <button class="btn btn-primary" onclick="shareCode()">📤 Поделиться</button>
+        <button class="btn btn-secondary" onclick="copyCode()">📋 Скопировать код</button>
+        <button class="btn btn-secondary" onclick="goToMenu()">🏠 В меню</button>
+    </div>
+
+    <!-- ВВОД КОДА -->
+    <div id="join" class="screen">
+        <h2>🔑 Введи код</h2>
+        <div class="card">
+            <input type="text" id="codeInput" placeholder="6-значный код" maxlength="6" style="text-align:center; font-size:24px; letter-spacing:5px;">
+        </div>
+        <button class="btn btn-primary" onclick="joinGame()">🎁 Открыть конверты</button>
+        <button class="btn btn-secondary" onclick="goToMenu()">⬅️ Назад</button>
+        <p id="joinError" style="color:#e74c3c; margin-top:10px;" class="hidden"></p>
+    </div>
+
+<script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+
+    const BOT_API_URL = 'https://blind-bot-production.up.railway.app/webapp';
+    
+    let currentStep = 0;
+    let theme = '';
+    let opt1 = '';
+    let opt2 = '';
+    let currentCode = '';
+    let gameData = null;
+    let envelopeOpened = false;
+
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function goToMenu() { 
+        showScreen('menu'); 
+        resetCreate();
+        envelopeOpened = false;
+        document.getElementById('resultBlock').classList.add('hidden');
+        document.getElementById('env1').classList.remove('opened', 'locked');
+        document.getElementById('env2').classList.remove('opened', 'locked');
+    }
+
+    function showCreate() { showScreen('create'); resetCreate(); }
+    function showJoin() { 
+        showScreen('join'); 
+        document.getElementById('codeInput').value = '';
+        document.getElementById('joinError').classList.add('hidden'); 
+    }
+
+    function openBot() { tg.openTelegramLink('https://t.me/SlepoyVibor_bot'); }
+
+    function resetCreate() {
+        currentStep = 0;
+        theme = ''; opt1 = ''; opt2 = '';
+        document.getElementById('themeInput').value = '';
+        document.getElementById('opt1Input').value = '';
+        document.getElementById('opt2Input').value = '';
+        document.getElementById('themeInput').classList.remove('hidden');
+        document.getElementById('opt1Input').classList.add('hidden');
+        document.getElementById('opt2Input').classList.add('hidden');
+        document.getElementById('stepInfo').textContent = 'Шаг 1 из 3: Введи тему';
+        document.getElementById('nextBtn').textContent = 'Далее ➡️';
+    }
+
+    function shakeElement(el) {
+        el.classList.add('shaking');
+        setTimeout(() => el.classList.remove('shaking'), 300);
+    }
+
+    function nextStep() {
+        if (currentStep === 0) {
+            theme = document.getElementById('themeInput').value.trim();
+            if (!theme) { shakeElement(document.getElementById('themeInput')); return; }
+            document.getElementById('themeInput').classList.add('hidden');
+            document.getElementById('opt1Input').classList.remove('hidden');
+            document.getElementById('stepInfo').textContent = 'Шаг 2 из 3: Введи первый вариант';
+            currentStep = 1;
+        } else if (currentStep === 1) {
+            opt1 = document.getElementById('opt1Input').value.trim();
+            if (!opt1) { shakeElement(document.getElementById('opt1Input')); return; }
+            document.getElementById('opt1Input').classList.add('hidden');
+            document.getElementById('opt2Input').classList.remove('hidden');
+            document.getElementById('stepInfo').textContent = 'Шаг 3 из 3: Введи второй вариант';
+            document.getElementById('nextBtn').textContent = '🎉 Создать!';
+            currentStep = 2;
+        } else if (currentStep === 2) {
+            opt2 = document.getElementById('opt2Input').value.trim();
+            if (!opt2) { shakeElement(document.getElementById('opt2Input')); return; }
+            createChoice();
+        }
+    }
+
+    function createChoice() {
+        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        currentCode = code;
+        
+        gameData = {
+            theme: theme,
+            options: [opt1, opt2].sort(() => Math.random() - 0.5),
+            done: false
+        };
+        
+        const games = JSON.parse(localStorage.getItem('blindChoices') || '{}');
+        games[code] = gameData;
+        localStorage.setItem('blindChoices', JSON.stringify(games));
+        
+        document.getElementById('codeDisplay').textContent = code;
+        document.getElementById('createdTheme').textContent = 'Тема: ' + theme;
+        showScreen('created');
+    }
+
+    function shareCode() {
+        const text = `🎲 Слепой выбор!\nТема: ${theme}\nКод: ${currentCode}\n\nОткрой @SlepoyVibor_bot и введи код!`;
+        tg.openTelegramLink(`https://t.me/share/url?url=&text=${encodeURIComponent(text)}`);
+    }
+
+    function copyCode() {
+        navigator.clipboard.writeText(currentCode).then(() => {
+            tg.showPopup({ title: '✅', message: 'Код скопирован! Отправь его другу.' });
+        }).catch(() => {
+            tg.showPopup({ title: '📋', message: 'Код: ' + currentCode });
+        });
+    }
+
+    function joinGame() {
+        const code = document.getElementById('codeInput').value.trim();
+        if (!code || code.length !== 6) {
+            document.getElementById('joinError').textContent = 'Введи 6-значный код';
+            document.getElementById('joinError').classList.remove('hidden');
+            return;
+        }
+        
+        const games = JSON.parse(localStorage.getItem('blindChoices') || '{}');
+        const game = games[code];
+        
+        if (!game) {
+            document.getElementById('joinError').textContent = 'Игра не найдена. Проверь код!';
+            document.getElementById('joinError').classList.remove('hidden');
+            return;
+        }
+        if (game.done) {
+            document.getElementById('joinError').textContent = 'Эта игра уже завершена!';
+            document.getElementById('joinError').classList.remove('hidden');
+            return;
+        }
+        
+        gameData = game;
+        currentCode = code;
+        document.getElementById('themeDisplay').textContent = 'Тема: ' + game.theme;
+        document.getElementById('resultBlock').classList.add('hidden');
+        document.getElementById('env1').classList.remove('opened', 'locked');
+        document.getElementById('env2').classList.remove('opened', 'locked');
+        envelopeOpened = false;
+        document.getElementById('joinError').classList.add('hidden');
+        showScreen('envelopes');
+    }
+
+    function openEnvelope(index) {
+        if (envelopeOpened) return;
+        if (!gameData || gameData.done) return;
+        
+        envelopeOpened = true;
+        gameData.done = true;
+        
+        const games = JSON.parse(localStorage.getItem('blindChoices') || '{}');
+        games[currentCode] = gameData;
+        localStorage.setItem('blindChoices', JSON.stringify(games));
+        
+        const chosen = gameData.options[index];
+        
+        document.getElementById('env' + (index + 1)).classList.add('opened');
+        document.getElementById('env' + (2 - index)).classList.add('locked');
+        
+        setTimeout(() => {
+            document.getElementById('resultText').innerHTML = `🎉 Ты выбрал: <b>${chosen}</b><br><br>🔒 Второй вариант скрыт навсегда!`;
+            document.getElementById('resultBlock').classList.remove('hidden');
+            
+            fetch(BOT_API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    initData: tg.initData,
+                    message: `🎲 Выбор сделан!\nТема: ${gameData.theme}\nВыбрано: ${chosen}`
+                })
+            }).catch(e => console.log('Бот не доступен'));
+        }, 600);
+    }
+</script>
+</body>
+</html>
